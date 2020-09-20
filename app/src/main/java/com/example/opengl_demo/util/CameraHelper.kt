@@ -1,17 +1,20 @@
 package com.example.opengl_demo.util
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
-import android.os.Bundle
+import android.os.Handler
+import android.os.HandlerThread
 import android.view.Surface
 import androidx.core.app.ActivityCompat
 
+
 class CameraHelper(baseContext: Context) {
+    private lateinit var mBackgroundHandler: Handler
+    private lateinit var mBackgroundThread: HandlerThread
     private lateinit var cameraManager: CameraManager
     lateinit var surfacePreview : Surface
     lateinit var cameraDevice: CameraDevice
@@ -21,6 +24,7 @@ class CameraHelper(baseContext: Context) {
     val TAG = "CameraHelper"
     init {
         this.baseContext = baseContext
+        startBackgroundThread()
     }
 
     public fun openCamera() {
@@ -40,10 +44,10 @@ class CameraHelper(baseContext: Context) {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-        cameraManager.openCamera(cameraManager.cameraIdList[0], cameraStateCallBack, null)
+        cameraManager.openCamera(cameraManager.cameraIdList[0], cameraStateCallBack, mBackgroundHandler)
     }
 
-    public fun setSurface(surface: Surface) {
+    fun setSurface(surface: Surface) {
         surfacePreview = surface
     }
 
@@ -51,11 +55,12 @@ class CameraHelper(baseContext: Context) {
         override fun onOpened(camera: CameraDevice) {
             cameraDevice = camera
             cameraDevice.createCaptureSession(listOf(surfacePreview), object :
-                CameraCaptureSession.StateCallback(){
+                CameraCaptureSession.StateCallback() {
                 override fun onConfigured(session: CameraCaptureSession) {
                     captureSession = session
                     //这里设置预览
-                    var requestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                    var requestBuilder =
+                        cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                     requestBuilder.addTarget(surfacePreview)
                     captureSession.setRepeatingRequest(requestBuilder.build(), null, null)
                 }
@@ -74,5 +79,11 @@ class CameraHelper(baseContext: Context) {
         override fun onError(camera: CameraDevice, error: Int) {
 
         }
+    }
+
+    private fun startBackgroundThread() {
+        mBackgroundThread = HandlerThread("CameraBackground")
+        mBackgroundThread.start()
+        mBackgroundHandler = Handler(mBackgroundThread.getLooper())
     }
 }

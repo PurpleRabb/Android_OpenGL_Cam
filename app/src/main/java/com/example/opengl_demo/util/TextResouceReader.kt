@@ -9,21 +9,24 @@ import java.io.InputStreamReader
 class TextResouceReader {
     private val TAG = "TextResourceReader"
 
-    public fun readTextFileFromResource(context: Context, resourceId: Int) : String {
-        var body = StringBuilder()
-        try {
-            var inputStream = context.resources.openRawResource(resourceId)
-            var inputStreamReader = InputStreamReader(inputStream)
-            var bufferReader = BufferedReader(inputStreamReader)
+    companion object {
+        fun readTextFileFromResource(context: Context, resourceId: Int): String {
+            var body = StringBuilder()
+            try {
+                var inputStream = context.resources.openRawResource(resourceId)
+                var inputStreamReader = InputStreamReader(inputStream)
+                var bufferReader = BufferedReader(inputStreamReader)
 
-            bufferReader.lineSequence().forEach {
-                body.append(it + '\n')
+                bufferReader.lineSequence().forEach {
+                    body.append(it + '\n')
+                }
+            } catch (e: IOException) {
+                throw RuntimeException("Could not open resource: $resourceId", e)
+            } catch (e: Resources.NotFoundException) {
+                throw java.lang.RuntimeException("Resource not found: $resourceId", e)
             }
-        } catch (e: IOException) {
-            throw RuntimeException("Could not open resource: $resourceId", e)
-        } catch (e: Resources.NotFoundException) {
-            throw java.lang.RuntimeException("Resource not found: $resourceId", e)
+            return body.toString()
         }
-        return body.toString()
+
     }
 }
