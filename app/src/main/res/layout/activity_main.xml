@@ -9,9 +9,17 @@
     <android.opengl.GLSurfaceView
         android:id="@+id/m_GLSurfaceView"
         android:layout_width="0dp"
+        android:layout_height="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/m_GLSurfaceView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
