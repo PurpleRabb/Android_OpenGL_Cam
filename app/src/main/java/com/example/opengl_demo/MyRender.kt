@@ -3,8 +3,6 @@ package com.example.opengl_demo
 import android.graphics.SurfaceTexture
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import android.util.Log
-import android.view.Surface
 import com.example.opengl_demo.filter.ScreenFilter
 import com.example.opengl_demo.util.CameraHelper
 import javax.microedition.khronos.egl.EGLConfig
@@ -17,7 +15,7 @@ class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
     private lateinit var mSurfaceTexture: SurfaceTexture
     private lateinit var mScreenFilter: ScreenFilter
 
-    private var t_matrix = FloatArray(16)
+    private var tMatrix = FloatArray(16)
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         cameraHelper = CameraHelper(mGLSurfaceView.context)
@@ -26,22 +24,21 @@ class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
         mSurfaceTexture = SurfaceTexture(mTextureId[0])
         mScreenFilter = ScreenFilter(mGLSurfaceView.context)
         mSurfaceTexture.setOnFrameAvailableListener {
-            mGLSurfaceView.requestRender() //这里发起渲染请求}
+            mGLSurfaceView.requestRender() //这里发起渲染请求
         }
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        cameraHelper.setSurface(Surface(mSurfaceTexture))
-        cameraHelper.openCamera()
+        cameraHelper.openCamera(width, height, mSurfaceTexture)
         mScreenFilter.setSize(width, height)
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        glClearColor(255f, 0f, 0f, 0f)
+        glClearColor(50f, 50f, 100f, 0f)
         glClear(GL_COLOR_BUFFER_BIT)
 
         mSurfaceTexture.updateTexImage()
-        mSurfaceTexture.getTransformMatrix(t_matrix)
-        mScreenFilter.draw(mTextureId, t_matrix)
+        mSurfaceTexture.getTransformMatrix(tMatrix)
+        mScreenFilter.draw(mTextureId, tMatrix)
     }
 }

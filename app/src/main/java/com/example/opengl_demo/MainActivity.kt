@@ -1,15 +1,11 @@
 package com.example.opengl_demo
 
-import android.graphics.SurfaceTexture
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Surface
-import android.view.TextureView
-import com.example.opengl_demo.util.CameraHelper
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var myRender : MyRender
+    //private lateinit var myRender : MyRender
     //private lateinit var testCameraHelper : CameraHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {

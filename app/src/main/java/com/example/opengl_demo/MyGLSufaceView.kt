@@ -3,11 +3,10 @@ package com.example.opengl_demo
 import android.content.Context
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
-import kotlinx.android.synthetic.main.activity_main.*
 
-class MyGLSufaceView : GLSurfaceView {
+class MyGLSufaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs) {
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    init {
         initGL()
     }
 
