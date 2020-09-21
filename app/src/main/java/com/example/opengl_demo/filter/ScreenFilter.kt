@@ -61,7 +61,7 @@ class ScreenFilter {
         glDeleteShader(fShaderId)
 
         //获取shader变量赋值
-        vPosition = glGetAttribLocation(mProgramId, "vPostion")
+        vPosition = glGetAttribLocation(mProgramId, "vPosition")
         vTexturePos = glGetAttribLocation(mProgramId, "vTexturePos")
         vMatrix = glGetUniformLocation(mProgramId, "vMatrix")
         vTexture = glGetUniformLocation(mProgramId, "vTexture")
