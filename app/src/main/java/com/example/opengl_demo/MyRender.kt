@@ -3,17 +3,17 @@ package com.example.opengl_demo
 import android.graphics.SurfaceTexture
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import com.example.opengl_demo.filter.ScreenFilter
+import com.example.opengl_demo.filter.CameraFilter
 import com.example.opengl_demo.util.CameraHelper
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
+class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
     private lateinit var cameraHelper: CameraHelper
-    private var mGLSurfaceView: MyGLSufaceView = myGLSufaceView
+    private var mGLSurfaceView: MyGLSurfaceView = myGLSufaceView
     private lateinit var mTextureId: IntArray
     private lateinit var mSurfaceTexture: SurfaceTexture
-    private lateinit var mScreenFilter: ScreenFilter
+    private lateinit var cameraFilter: CameraFilter
 
     private var tMatrix = FloatArray(16)
 
@@ -22,7 +22,7 @@ class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
         mTextureId = IntArray(1)
         glGenTextures(mTextureId.size, mTextureId, 0)
         mSurfaceTexture = SurfaceTexture(mTextureId[0])
-        mScreenFilter = ScreenFilter(mGLSurfaceView.context)
+        cameraFilter = CameraFilter(mGLSurfaceView.context, R.raw.camera_vertex, R.raw.camera_fragment)
         mSurfaceTexture.setOnFrameAvailableListener {
             mGLSurfaceView.requestRender() //这里发起渲染请求
         }
@@ -30,7 +30,7 @@ class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         cameraHelper.openCamera(width, height, mSurfaceTexture)
-        mScreenFilter.setSize(width, height)
+        cameraFilter.setSize(width, height)
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -39,6 +39,7 @@ class MyRender(myGLSufaceView: MyGLSufaceView) : GLSurfaceView.Renderer {
 
         mSurfaceTexture.updateTexImage()
         mSurfaceTexture.getTransformMatrix(tMatrix)
-        mScreenFilter.draw(mTextureId, tMatrix)
+        cameraFilter.setMatrix(tMatrix)
+        cameraFilter.draw(mTextureId)
     }
 }

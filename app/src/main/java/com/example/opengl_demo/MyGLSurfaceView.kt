@@ -4,7 +4,7 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 
-class MyGLSufaceView(context: Context?, attrs: AttributeSet?) : GLSurfaceView(context, attrs) {
+class MyGLSurfaceView(context: Context, attrs: AttributeSet) : GLSurfaceView(context, attrs) {
 
     init {
         initGL()
