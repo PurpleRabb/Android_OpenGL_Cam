@@ -79,10 +79,10 @@ class ScreenFilter {
         mTextureBuffer =
             ByteBuffer.allocateDirect(4 * 2 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer()
         var t = floatArrayOf( //根据Android屏幕的坐标系画点,左下角开始
-            0.0f, 1.0f,
-            1.0f, 1.0f,
             0.0f, 0.0f,
-            1.0f, 0.0f
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f
         )
         mTextureBuffer.put(t)
 
