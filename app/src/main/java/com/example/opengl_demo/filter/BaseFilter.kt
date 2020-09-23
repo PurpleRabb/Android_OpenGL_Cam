@@ -77,7 +77,7 @@ open class BaseFilter(context: Context, vertexId: Int, fragmentId : Int) {
         mTextureBuffer.put(t)
     }
 
-    open fun draw(mTextureId: IntArray) {
+    open fun draw(mTextureId: Int) : Int {
         glViewport(0, 0, mWidth, mHeight) //设置视窗大小
         glUseProgram(mProgramId)
 
@@ -93,15 +93,21 @@ open class BaseFilter(context: Context, vertexId: Int, fragmentId : Int) {
         //glUniformMatrix4fv(vMatrix, 1, false, t_matrix, 0)
 
         glActiveTexture(GL_TEXTURE0) //指定纹理
-        glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId[0])
+        glBindTexture(GL_TEXTURE_2D, mTextureId)
         glUniform1i(vTexture, 0)
 
         //绘制
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
+
+        return mTextureId
     }
 
-    fun setSize(width: Int, height: Int) {
+    open fun onReady(width: Int, height: Int) {
         this.mWidth = width
         this.mHeight = height
+    }
+
+    open fun release() {
+        glDeleteProgram(mProgramId)
     }
 }

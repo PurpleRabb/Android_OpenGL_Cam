@@ -4,6 +4,7 @@ import android.graphics.SurfaceTexture
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import com.example.opengl_demo.filter.CameraFilter
+import com.example.opengl_demo.filter.ScreenFilter
 import com.example.opengl_demo.util.CameraHelper
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -14,6 +15,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
     private lateinit var mTextureId: IntArray
     private lateinit var mSurfaceTexture: SurfaceTexture
     private lateinit var cameraFilter: CameraFilter
+    private lateinit var screenFilter: ScreenFilter
 
     private var tMatrix = FloatArray(16)
 
@@ -23,6 +25,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         glGenTextures(mTextureId.size, mTextureId, 0)
         mSurfaceTexture = SurfaceTexture(mTextureId[0])
         cameraFilter = CameraFilter(mGLSurfaceView.context, R.raw.camera_vertex, R.raw.camera_fragment)
+        screenFilter = ScreenFilter(mGLSurfaceView.context, R.raw.base_vertext, R.raw.base_fragment)
         mSurfaceTexture.setOnFrameAvailableListener {
             mGLSurfaceView.requestRender() //这里发起渲染请求
         }
@@ -30,7 +33,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         cameraHelper.openCamera(width, height, mSurfaceTexture)
-        cameraFilter.setSize(width, height)
+        cameraFilter.onReady(width, height)
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -40,6 +43,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         mSurfaceTexture.updateTexImage()
         mSurfaceTexture.getTransformMatrix(tMatrix)
         cameraFilter.setMatrix(tMatrix)
-        cameraFilter.draw(mTextureId)
+        var textureId = cameraFilter.draw(mTextureId[0])
+        screenFilter.draw(textureId)
     }
 }
