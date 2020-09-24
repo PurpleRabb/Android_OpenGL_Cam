@@ -34,6 +34,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         cameraHelper.openCamera(width, height, mSurfaceTexture)
         cameraFilter.onReady(width, height)
+        screenFilter.onReady(width, height)
     }
 
     override fun onDrawFrame(gl: GL10?) {
