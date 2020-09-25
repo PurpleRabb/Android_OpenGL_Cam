@@ -2,16 +2,23 @@ package com.example.opengl_demo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
     //private lateinit var myRender : MyRender
     //private lateinit var testCameraHelper : CameraHelper
+    private lateinit var myMediaRecorder: MyMediaRecorder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        textureView.surfaceTextureListener = ( object : TextureView.SurfaceTextureListener {
+        myMediaRecorder = MyMediaRecorder()
+        record.setOnClickListener { myMediaRecorder.startRecord() }
+    }
+
+    fun testCamera() {
+//            textureView.surfaceTextureListener = ( object : TextureView.SurfaceTextureListener {
 //            override fun onSurfaceTextureAvailable(
 //                surface: SurfaceTexture?,
 //                width: Int,
@@ -37,7 +44,6 @@ class MainActivity : AppCompatActivity() {
 //            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
 //            }
 //        })
-
     }
 
     /**

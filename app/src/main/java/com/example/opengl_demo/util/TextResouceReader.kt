@@ -11,11 +11,11 @@ class TextResouceReader {
 
     companion object {
         fun readTextFileFromResource(context: Context, resourceId: Int): String {
-            var body = StringBuilder()
+            val body = StringBuilder()
             try {
-                var inputStream = context.resources.openRawResource(resourceId)
-                var inputStreamReader = InputStreamReader(inputStream)
-                var bufferReader = BufferedReader(inputStreamReader)
+                val inputStream = context.resources.openRawResource(resourceId)
+                val inputStreamReader = InputStreamReader(inputStream)
+                val bufferReader = BufferedReader(inputStreamReader)
 
                 bufferReader.lineSequence().forEach {
                     body.append(it + '\n')

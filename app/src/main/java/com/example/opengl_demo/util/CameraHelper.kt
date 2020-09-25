@@ -442,6 +442,7 @@ class CameraHelper(private val mContext: Context) {
             val w = aspectRatio.width
             val h = aspectRatio.height
             for (option in choices) {
+                Log.i("CameraHelper:",option.toString())
                 if (option.width <= maxWidth && option.height <= maxHeight && option.height == option.width * h / w) {
                     if (option.width >= textureViewWidth &&
                         option.height >= textureViewHeight
