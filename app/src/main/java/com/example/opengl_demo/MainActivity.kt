@@ -8,13 +8,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     //private lateinit var myRender : MyRender
     //private lateinit var testCameraHelper : CameraHelper
-    private lateinit var myMediaRecorder: MyMediaRecorder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        myMediaRecorder = MyMediaRecorder()
-        record.setOnClickListener { myMediaRecorder.startRecord() }
+
+        record.setOnClickListener { m_GLSurfaceView.startRecord() }
     }
 
     fun testCamera() {

@@ -370,6 +370,10 @@ class CameraHelper(private val mContext: Context) {
         this.onPreviewListener = onPreviewListener
     }
 
+    fun getPreviewSize() : Size? {
+        return size
+    }
+
     interface OnPreviewSizeListener {
         fun onSize(width: Int, height: Int)
     }
@@ -377,6 +381,7 @@ class CameraHelper(private val mContext: Context) {
     interface OnPreviewListener {
         fun onPreviewFrame(data: ByteArray?, len: Int)
     }
+
 
     companion object {
         /**

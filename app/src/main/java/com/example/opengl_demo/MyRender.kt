@@ -3,6 +3,7 @@ package com.example.opengl_demo
 import android.graphics.SurfaceTexture
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
+import android.util.Log
 import com.example.opengl_demo.filter.CameraFilter
 import com.example.opengl_demo.filter.ScreenFilter
 import com.example.opengl_demo.util.CameraHelper
@@ -16,7 +17,9 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
     private lateinit var mSurfaceTexture: SurfaceTexture
     private lateinit var cameraFilter: CameraFilter
     private lateinit var screenFilter: ScreenFilter
+    private var mMediaRecorder: MyMediaRecorder? = null
 
+    private val TAG = "MyRender"
     private var tMatrix = FloatArray(16)
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
@@ -33,6 +36,13 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         cameraHelper.openCamera(width, height, mSurfaceTexture)
+        if (mMediaRecorder == null) {
+            var size = cameraHelper.getPreviewSize()
+            if (size != null) {
+                mMediaRecorder = MyMediaRecorder(size.width, size.height)
+                Log.i(TAG,size.toString())
+            }
+        }
         cameraFilter.onReady(width, height)
         screenFilter.onReady(width, height)
     }
@@ -46,5 +56,9 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         cameraFilter.setMatrix(tMatrix)
         var textureId = cameraFilter.draw(mTextureId[0])
         screenFilter.draw(textureId)
+    }
+
+    fun startRecord() {
+
     }
 }
