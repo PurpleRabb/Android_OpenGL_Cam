@@ -1,16 +1,22 @@
 package com.example.opengl_demo
 
 import android.media.*
+import android.opengl.EGLContext
 import android.os.Environment
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.Log
 import android.view.Surface
-import java.io.File
 
 
-class MyMediaRecorder(width: Int, height: Int) {
+class MyMediaRecorder(width: Int, height: Int, share_context : EGLContext) {
     private var mInputSurface: Surface
     private val TAG = "MyMediaRecorder"
     private lateinit var mediaCodec: MediaCodec
+    private lateinit var mediaMuxer : MediaMuxer
+    private lateinit var handler : Handler
+    private lateinit var myEgl : MyEGL
+    private var share_context = share_context
     private var path : String = Environment.getExternalStorageDirectory().getPath() + "/test111.mp4"
 
     init {
@@ -39,11 +45,19 @@ class MyMediaRecorder(width: Int, height: Int) {
 
         //创建封装器
         try {
-            var mediaMuxer = MediaMuxer(path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+            mediaMuxer = MediaMuxer(path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
         } catch (e:Exception) {
             e.printStackTrace()
         }
 
+        //配置EGL环境
+        var handlerThread = HandlerThread("MyRecorderThread")
+        handlerThread.start()
+        var looper = handlerThread.looper
+        handler = Handler(looper)
+        handler.post(Runnable {
+            myEgl = MyEGL(share_context)
+        })
     }
 
     fun startRecord() {

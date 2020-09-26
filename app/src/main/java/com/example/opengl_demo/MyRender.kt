@@ -1,6 +1,7 @@
 package com.example.opengl_demo
 
 import android.graphics.SurfaceTexture
+import android.opengl.EGL14
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.util.Log
@@ -39,7 +40,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         if (mMediaRecorder == null) {
             var size = cameraHelper.getPreviewSize()
             if (size != null) {
-                mMediaRecorder = MyMediaRecorder(size.width, size.height)
+                mMediaRecorder = MyMediaRecorder(size.width, size.height, EGL14.eglGetCurrentContext())
                 Log.i(TAG,size.toString())
             }
         }
