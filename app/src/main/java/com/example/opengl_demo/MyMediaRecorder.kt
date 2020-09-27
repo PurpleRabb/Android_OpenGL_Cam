@@ -66,7 +66,7 @@ class MyMediaRecorder(private val width: Int, private val height: Int, share_con
         val looper = handlerThread.looper
         handler = Handler(looper)
         handler.post {
-            myEgl = MyEGL(shareContext, mInputSurface, mContext, this.width, this.height)
+            myEgl = MyEGL(shareContext, mInputSurface, mContext, this.height, this.width)
             mediaCodec.start() //启动编码器
             isStart = true
         }
