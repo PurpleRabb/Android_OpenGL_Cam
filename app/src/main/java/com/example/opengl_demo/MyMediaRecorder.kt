@@ -82,6 +82,8 @@ class MyMediaRecorder(private val width: Int, private val height: Int, share_con
     }
 
     fun stopRecord() {
+        if (!isStart)
+            return
         isStart = false
         handler.post {
             Log.i(TAG, "stopRecord:$path")
