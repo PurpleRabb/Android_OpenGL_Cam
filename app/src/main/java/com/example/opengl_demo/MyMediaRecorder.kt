@@ -11,20 +11,26 @@ import android.view.Surface
 
 
 @Suppress("DEPRECATION")
-class MyMediaRecorder(width: Int, height: Int, share_context: EGLContext, context: Context) {
-    private var mInputSurface: Surface
+class MyMediaRecorder(private val width: Int, private val height: Int, share_context: EGLContext, context: Context) {
+    private lateinit var mInputSurface: Surface
     private val TAG = "MyMediaRecorder"
-    private var mediaCodec: MediaCodec
+    private lateinit var mediaCodec: MediaCodec
     private lateinit var mediaMuxer: MediaMuxer
-    private var handler: Handler
+    private lateinit var handler: Handler
     private lateinit var myEgl: MyEGL
-    private var share_context = share_context
+    private var shareContext = share_context
     private var mContext = context
-    private var path: String = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.absolutePath + "/test111.mp4"
+    private var path: String = context.getExternalFilesDir(Environment.DIRECTORY_MOVIES)?.absolutePath +"/" + System.currentTimeMillis() + "test.mp4"
     private var isStart = false
 
     init {
-        getCodeInfo()  //test
+        //getCodeInfo()  //test
+    }
+
+    fun startRecord() {
+        Log.i(TAG, "startRecord:$path")
+        if (isStart)
+            return
         mediaCodec = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
 
         //设置格式
@@ -60,16 +66,10 @@ class MyMediaRecorder(width: Int, height: Int, share_context: EGLContext, contex
         val looper = handlerThread.looper
         handler = Handler(looper)
         handler.post {
-            myEgl = MyEGL(share_context, mInputSurface, mContext, width, height)
-            //mediaCodec.start() //启动编码器
-            //isStart = true
+            myEgl = MyEGL(shareContext, mInputSurface, mContext, this.width, this.height)
+            mediaCodec.start() //启动编码器
+            isStart = true
         }
-    }
-
-    fun startRecord() {
-        Log.i(TAG, "startRecord:" + path )
-        mediaCodec.start() //启动编码器
-        isStart = true
     }
 
     fun encodeFrame(textureId: Int, timestamp: Long) {
@@ -82,9 +82,9 @@ class MyMediaRecorder(width: Int, height: Int, share_context: EGLContext, contex
     }
 
     fun stopRecord() {
-        Log.i(TAG, "stopRecord:" + path )
         isStart = false
         handler.post {
+            Log.i(TAG, "stopRecord:$path")
             getEncodeData(true) //手动停止
             mediaCodec.stop()
             mediaCodec.release()
@@ -105,20 +105,23 @@ class MyMediaRecorder(width: Int, height: Int, share_context: EGLContext, contex
         while (true) {
             when (val status = mediaCodec.dequeueOutputBuffer(bufferInfo, 10000)) {
                 MediaCodec.INFO_TRY_AGAIN_LATER -> {
-                    if (endOfStream) {
+                    Log.i(TAG, "INFO_TRY_AGAIN_LATER")
+                    if (!endOfStream) {
                         break
                     }
                 }
                 MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED -> {
-
+                    Log.i(TAG, "INFO_OUTPUT_BUFFERS_CHANGED")
                 }
                 MediaCodec.INFO_OUTPUT_FORMAT_CHANGED -> {
+                    Log.i(TAG, "INFO_OUTPUT_FORMAT_CHANGED")
                     index = mediaMuxer.addTrack(mediaCodec.outputFormat)
                     mediaMuxer.start() //启动封装器
                 }
                 else -> {
                     //取有效的数据
                     val outputBuffer = mediaCodec.getOutputBuffer(status)
+                    Log.i(TAG, bufferInfo.size.toString())
                     if (bufferInfo.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) {
                         //配置信息丢弃
                         bufferInfo.size = 0
