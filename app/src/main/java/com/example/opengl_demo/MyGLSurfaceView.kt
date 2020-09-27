@@ -22,4 +22,8 @@ class MyGLSurfaceView(context: Context, attrs: AttributeSet) : GLSurfaceView(con
     fun startRecord() {
         myRender.startRecord()
     }
+
+    fun stopRecord() {
+        myRender.stopRecord()
+    }
 }

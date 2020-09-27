@@ -40,7 +40,7 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         if (mMediaRecorder == null) {
             var size = cameraHelper.getPreviewSize()
             if (size != null) {
-                mMediaRecorder = MyMediaRecorder(size.width, size.height, EGL14.eglGetCurrentContext())
+                mMediaRecorder = MyMediaRecorder(size.width, size.height, EGL14.eglGetCurrentContext(), mGLSurfaceView.context)
                 Log.i(TAG,size.toString())
             }
         }
@@ -57,9 +57,14 @@ class MyRender(myGLSufaceView: MyGLSurfaceView) : GLSurfaceView.Renderer {
         cameraFilter.setMatrix(tMatrix)
         var textureId = cameraFilter.draw(mTextureId[0])
         screenFilter.draw(textureId)
+        mMediaRecorder?.encodeFrame(textureId, mSurfaceTexture.timestamp) //这里进行编码
     }
 
     fun startRecord() {
+        mMediaRecorder?.startRecord()
+    }
 
+    fun stopRecord() {
+        mMediaRecorder?.stopRecord()
     }
 }

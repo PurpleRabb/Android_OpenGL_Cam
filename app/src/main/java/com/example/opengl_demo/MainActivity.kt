@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         record.setOnClickListener { m_GLSurfaceView.startRecord() }
+        stop.setOnClickListener { m_GLSurfaceView.stopRecord() }
     }
 
     fun testCamera() {
