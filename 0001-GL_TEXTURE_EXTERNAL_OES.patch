@@ -1,0 +1,31 @@
+From 3e63817e9289a0514bdfd8f27559597c5db8d42b Mon Sep 17 00:00:00 2001
+From: liushuo <364725259@qq.com>
+Date: Fri, 9 Oct 2020 14:01:03 +0800
+Subject: [PATCH 1/2] =?UTF-8?q?=E7=94=A8GL=5FTEXTURE=5FEXTERNAL=5FOES?=
+ =?UTF-8?q?=E6=B8=B2=E6=9F=93=E7=9B=B8=E6=9C=BA=E5=9B=BE=E5=83=8F?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ .../main/java/com/example/opengl_demo/filter/CameraFilter.kt  | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/app/src/main/java/com/example/opengl_demo/filter/CameraFilter.kt b/app/src/main/java/com/example/opengl_demo/filter/CameraFilter.kt
+index cb63405..9e3817b 100644
+--- a/app/src/main/java/com/example/opengl_demo/filter/CameraFilter.kt
++++ b/app/src/main/java/com/example/opengl_demo/filter/CameraFilter.kt
+@@ -41,8 +41,8 @@ class CameraFilter(context: Context, vertexId: Int, fragmentId: Int) : BaseFilte
+         glUniformMatrix4fv(vMatrix, 1, false, tMatrix, 0)
+ 
+         glActiveTexture(GL_TEXTURE0) //指定纹理
+-        //glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId)
+-        glBindTexture(GL_TEXTURE_2D, mTextureId)
++        glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId)
++        //glBindTexture(GL_TEXTURE_2D, mTextureId)
+         glUniform1i(vTexture, 0)
+ 
+         //绘制
+-- 
+2.19.0.windows.1
+
