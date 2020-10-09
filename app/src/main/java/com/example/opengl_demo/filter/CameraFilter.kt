@@ -41,8 +41,8 @@ class CameraFilter(context: Context, vertexId: Int, fragmentId: Int) : BaseFilte
         glUniformMatrix4fv(vMatrix, 1, false, tMatrix, 0)
 
         glActiveTexture(GL_TEXTURE0) //指定纹理
-        //glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId)
-        glBindTexture(GL_TEXTURE_2D, mTextureId)
+        glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, mTextureId)
+        //glBindTexture(GL_TEXTURE_2D, mTextureId)
         glUniform1i(vTexture, 0)
 
         //绘制
