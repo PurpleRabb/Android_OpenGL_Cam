@@ -23,6 +23,8 @@ class CameraHelper(private val mContext: Context) {
     private var onPreviewSizeListener: OnPreviewSizeListener? = null
     private lateinit var imageReader: ImageReader
     private var onPreviewListener: OnPreviewListener? = null
+    private var mWidth = 0
+    private var mHeight = 0
 
     /**
      * The [android.util.Size] of camera preview.
@@ -372,6 +374,18 @@ class CameraHelper(private val mContext: Context) {
 
     fun getPreviewSize() : Size? {
         return size
+    }
+
+    fun getCameraID(): Int {
+        return cameraId
+    }
+
+    fun getWidth(): Int? {
+        return size?.width
+    }
+
+    fun getHeight(): Int? {
+        return size?.height
     }
 
     interface OnPreviewSizeListener {
