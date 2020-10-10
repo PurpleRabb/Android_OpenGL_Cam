@@ -40,12 +40,12 @@
             android:layout_weight="0.5"
             android:text="stop" />
 
-        <Button
-            android:id="@+id/button5"
+        <CheckBox
+            android:id="@+id/bigeye"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Button" />
+            android:text="BigEyE" />
 
         <Button
             android:id="@+id/button6"

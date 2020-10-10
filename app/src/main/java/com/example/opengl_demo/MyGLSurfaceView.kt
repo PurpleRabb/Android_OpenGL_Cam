@@ -26,4 +26,8 @@ class MyGLSurfaceView(context: Context, attrs: AttributeSet) : GLSurfaceView(con
     fun stopRecord() {
         myRender.stopRecord()
     }
+
+    fun enableBigEye(checked: Boolean) {
+        myRender.enableBigEye(checked)
+    }
 }

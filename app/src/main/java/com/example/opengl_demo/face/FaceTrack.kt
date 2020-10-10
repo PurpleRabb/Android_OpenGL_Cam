@@ -6,7 +6,7 @@ import android.os.Message
 import android.util.Log
 import com.example.opengl_demo.util.CameraHelper
 
-class FaceTrack {
+class FaceTrack(face_model: String, seeta: String, cameraHelper: CameraHelper?) {
     private val TAG = "FaceTrack"
 
     companion object {
@@ -32,7 +32,7 @@ class FaceTrack {
      * @param seeta 中科院人脸关键点检测的模型文件路径
      * @param cameraHelper
      */
-    fun FaceTrack(face_model: String, seeta: String, cameraHelper: CameraHelper?) {
+    init {
         mCameraHelper = cameraHelper
         self = native_create(face_model, seeta)
         mHandlerThread = HandlerThread("FaceTrack")
@@ -42,13 +42,13 @@ class FaceTrack {
             override fun handleMessage(msg: Message) {
                 //子线程 耗时再久 也不会对其他地方 (如：opengl绘制线程) 产生影响
                 synchronized(_lock) {
-
                     //定位 线程中检测
+                    Log.i(TAG, "native_detector")
                     mFace = native_detector(
                         self, msg.obj as ByteArray, mCameraHelper?.getCameraID()!!,
                         mCameraHelper?.getWidth()!!, mCameraHelper?.getHeight()!!
                     )
-                    if (mFace != null) Log.e(TAG, mFace.toString())
+                    if (mFace != null) Log.i(TAG, mFace.toString())
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.example.opengl_demo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.CompoundButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -16,6 +17,9 @@ class MainActivity : AppCompatActivity() {
         Log.i("opencv:",stringFromJNI())
         record.setOnClickListener { m_GLSurfaceView.startRecord() }
         stop.setOnClickListener { m_GLSurfaceView.stopRecord() }
+        bigeye.setOnCheckedChangeListener {
+                buttonView, isChecked -> m_GLSurfaceView.enableBigEye(isChecked)
+        }
     }
 
     fun testCamera() {
