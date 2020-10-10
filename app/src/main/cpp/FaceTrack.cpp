@@ -23,15 +23,19 @@ void FaceTrack::stopTracking() {
 
 void FaceTrack::detector(Mat src, vector<Rect2f> &rects) {
     vector<Rect> faces;
+
+    //opencv检测人脸
     tracker->process(src);
     tracker->getObjects(faces);
 
     if (faces.size()) {
-        Rect face = faces[0];
+        Rect face = faces[0]; //第一个数据是人脸框
         rects.push_back(Rect2f(face.x, face.y, face.width, face.height));
 
         //构造seeta引擎所需要的人脸数据
         seeta::ImageData imageData(src.cols, src.rows);
+        imageData.data = src.data;
+
         seeta::FaceInfo faceInfo;
         seeta::Rect bbox;
         bbox.x = face.x;

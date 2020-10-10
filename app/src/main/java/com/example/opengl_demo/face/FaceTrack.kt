@@ -36,16 +36,17 @@ class FaceTrack {
         mCameraHelper = cameraHelper
         self = native_create(face_model, seeta)
         mHandlerThread = HandlerThread("FaceTrack")
-        mHandlerThread!!.start()
-        mHandler = object : Handler(mHandlerThread!!.looper) {
+        mHandlerThread?.start()
+        val _lock = Any()
+        mHandler = object : Handler(mHandlerThread?.looper) {
             override fun handleMessage(msg: Message) {
                 //子线程 耗时再久 也不会对其他地方 (如：opengl绘制线程) 产生影响
-                synchronized(this) {
+                synchronized(_lock) {
 
                     //定位 线程中检测
                     mFace = native_detector(
-                        self, msg.obj as ByteArray, mCameraHelper?.getCameraID(),
-                        mCameraHelper?.getWidth(), mCameraHelper?.getHeight()
+                        self, msg.obj as ByteArray, mCameraHelper?.getCameraID()!!,
+                        mCameraHelper?.getWidth()!!, mCameraHelper?.getHeight()!!
                     )
                     if (mFace != null) Log.e(TAG, mFace.toString())
                 }
@@ -59,8 +60,8 @@ class FaceTrack {
 
     fun stopTrack() {
         synchronized(this) {
-            mHandlerThread!!.quitSafely()
-            mHandler!!.removeCallbacksAndMessages(null)
+            mHandlerThread?.quitSafely()
+            mHandler?.removeCallbacksAndMessages(null)
             native_stop(self)
             self = 0
         }
@@ -69,11 +70,11 @@ class FaceTrack {
 
     fun detector(data: ByteArray?) {
         //把积压的 11号任务移除掉
-        mHandler!!.removeMessages(11)
+        mHandler?.removeMessages(11)
         //加入新的11号任务
-        val message = mHandler!!.obtainMessage(11)
-        message.obj = data
-        mHandler!!.sendMessage(message)
+        val message = mHandler?.obtainMessage(11)
+        message?.obj = data
+        mHandler?.sendMessage(message)
     }
 
     fun getFace(): Face? {
@@ -88,8 +89,8 @@ class FaceTrack {
     private external fun native_stop(self: Long)
 
     private external fun native_detector(
-        self: Long, data: ByteArray, cameraId: Int?, width: Int?,
-        height: Int?
+        self: Long, data: ByteArray, cameraId: Int, width: Int,
+        height: Int
     ): Face
 
 

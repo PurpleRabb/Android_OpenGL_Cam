@@ -380,12 +380,12 @@ class CameraHelper(private val mContext: Context) {
         return cameraId
     }
 
-    fun getWidth(): Int? {
-        return size?.width
+    fun getWidth(): Int {
+        return size!!.width
     }
 
-    fun getHeight(): Int? {
-        return size?.height
+    fun getHeight(): Int {
+        return size!!.height
     }
 
     interface OnPreviewSizeListener {

@@ -2,7 +2,7 @@ package com.example.opengl_demo.face
 
 import java.util.*
 
-class Face {
+class Face constructor(width: Int, height: Int, imgWidth: Int, imgHeight: Int, landmarks: FloatArray){
     //每两个 保存 一个点 x+y
     //0、1 : 保存人脸的 x与y
     // 后面的 保存人脸关键点坐标 有序的
@@ -16,7 +16,7 @@ class Face {
     var imgWidth = 0
     var imgHeight = 0
 
-    fun Face(width: Int, height: Int, imgWidth: Int, imgHeight: Int, landmarks: FloatArray) {
+    init {
         this.width = width
         this.height = height
         this.imgWidth = imgWidth
